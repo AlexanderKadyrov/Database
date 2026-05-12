@@ -6,10 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Database",
     platforms: [
-        .iOS(.v13),
-        .macOS(.v10_15),
-        .tvOS(.v13),
-        .watchOS(.v7)
+        .iOS(.v16)
     ],
     products: [
         .library(
