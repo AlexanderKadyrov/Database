@@ -45,11 +45,35 @@ struct DatabaseServiceImpl: DatabaseService {
         }
     }
     
+    func fetchAll<E: EntityDTO>(type: E.Type, sql: String?) throws -> [E] {
+        guard let databaseQueue else {
+            throw Errors.badDatabaseQueue
+        }
+        return try databaseQueue.read { database in
+            guard let sql else {
+                return try E.fetchAll(database)
+            }
+            return try E.fetchAll(database, sql: sql)
+        }
+    }
+    
     func fetchOne<E: EntityDTO>(type: E.Type, sql: String?) async throws -> E? {
         guard let databaseQueue else {
             throw Errors.badDatabaseQueue
         }
         return try await databaseQueue.read { database in
+            guard let sql else {
+                return try E.fetchOne(database)
+            }
+            return try E.fetchOne(database, sql: sql)
+        }
+    }
+    
+    func fetchOne<E: EntityDTO>(type: E.Type, sql: String?) throws -> E? {
+        guard let databaseQueue else {
+            throw Errors.badDatabaseQueue
+        }
+        return try databaseQueue.read { database in
             guard let sql else {
                 return try E.fetchOne(database)
             }
